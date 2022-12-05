@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import css from './ContactForm.module.scss';
 
@@ -17,10 +18,6 @@ export class ContactForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
     this.props.onSubmit({ ...this.state });
-    this.reset();
-  };
-
-  reset = () => {
     this.setState({ ...INITIAL_STATE });
   };
 
@@ -60,3 +57,7 @@ export class ContactForm extends Component {
     );
   }
 }
+
+ContactForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};

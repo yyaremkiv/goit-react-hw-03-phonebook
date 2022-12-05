@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import css from './app.module.scss';
 
 import { ContactForm } from '../components/ContactForm/ContactForm';
 import { Filter } from './Filter/Filter';
 import { ContactList } from '../components/ContactList/ContactList';
+import css from './app.module.scss';
 
 const shortid = require('shortid');
 
@@ -20,12 +20,10 @@ export class App extends Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(_, prevState) {
     if (this.state.contacts !== prevState.contacts) {
       localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
     }
-    console.log('prevProps', prevProps);
-    console.log('prevState', prevState);
   }
 
   handleSubmit = ({ name, number }) => {
@@ -62,11 +60,16 @@ export class App extends Component {
     });
   };
 
-  render() {
+  getFilteredContacts = () => {
     const filterContact = this.state.contacts.filter(contact =>
       contact.name.toLocaleLowerCase().includes(this.state.filter)
     );
-    const { handleSubmit, handleFilter, deleteContact } = this;
+    return filterContact;
+  };
+
+  render() {
+    const { handleSubmit, handleFilter, deleteContact, getFilteredContacts } =
+      this;
     return (
       <div className={css.container}>
         <h1 className={css.title}>Phonebook</h1>
@@ -78,7 +81,7 @@ export class App extends Component {
             <div className={css.contacts__container}>
               <Filter onChange={handleFilter} />
               <ContactList
-                contacts={filterContact}
+                contacts={getFilteredContacts()}
                 delContact={deleteContact}
               />
             </div>
